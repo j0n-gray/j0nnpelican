@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="linux, security">
+
+  <title>
+    Jonathan Gray
+&ndash; Using NMAP to enumerate ciphers and find vulnerabilities  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html">Using NMAP to enumerate ciphers and find vulnerabilities</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Sat 26 May 2018</p>
+ Tags:
+      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/security.html">#security</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>in an ideal world we are all using TLS 1.2 with strong ciphers for application layer internet
+facing  protocols such as HTTPS and SMTP. With NMAP we can quickly discover if this is the case:</p>
+<div class="highlight"><pre><span></span>sudo nmap -Sv --script ssl-enumerate-ciphers -p 443 localhost &amp;lt;&amp;lt; replace as needed
+</pre></div>
+
+
+<p>example output:</p>
+<div class="highlight"><pre><span></span>PORT    STATE SERVICE REASON
+443/tcp open  https   syn-ack
+| ssl-enum-ciphers:
+|   TLSv1.0:
+|     ciphers:
+|       TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A
+|       TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C
+|       TLS_ECDHE_ECDSA_WITH_RC4_128_SHA (secp256r1) - C
+|       TLS_ECDHE_RSA_WITH_RC4_128_SHA (secp256r1) - C
+|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_RC4_128_MD5 (rsa 2048) - C
+|     compressors:
+|       NULL
+|     cipher preference: server
+|     warnings:
+|       64-bit block cipher 3DES vulnerable to SWEET32 attack
+|       Broken cipher RC4 is deprecated by RFC 7465
+|       Ciphersuite uses MD5 for message integrity
+|       Weak certificate signature: SHA1
+</pre></div>
+
+
+<p>3DES and RC4 ciphers are especially dangerous to look out for - they are
+very insecure. also you <em>really</em> should be using TLS1.2 only but if there
+are compatibility issues with older browsers in corporate environments
+(which to me isnt a good enough excuse) then you should at the <em>very least</em> not be using SSL anymore.</p>
+<h3>sources / further reading:</h3>
+<ol>
+<li><a href="https://nmap.org/nsedoc/scripts/ssl-enum-ciphers.html">nmap documentation</a></li>
+<li><a href="https://sweet32.info/">sweet32</a></li>
+</ol>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="linux, DevOps">
+
+  <title>
+    Jonathan Gray
+&ndash; My Traefik Configuration - Docker Reverse Proxy  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./my-traefik-configuration-docker-reverse-proxy.html">My Traefik Configuration - Docker Reverse Proxy</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Wed 09 January 2019</p>
+ Tags:
+      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/devops.html">#DevOps</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>In this article I will run through my Traefik configuration, which currently handles routing and load-balancing (in future) to 22 docker containers (5+ wordpresses, prometheus and this blog).</p>
+<p>My traefik setup consists of a .toml file and uses docker-compose. Firstly, looking at the docker-compose.yml</p>
+<div class="highlight"><pre><span></span>version: &#39;2&#39;
+
+services:
+  rnetwork:
+    image: traefik:latest
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    networks:
+      - network
+      - metric
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/traefik/traefik.toml:/traefik.toml
+    container_name: traefik
+    restart: always
+networks:
+  network:
+    external: true
+  prometheus:
+    external:
+     name: prometheus_backend
+  bridge:
+    external: true
+</pre></div>
+
+
+<p>so here we make a docker-compose which spins up traefik. the important thing to know is the networking aspect. traefik is mapped to an external network which you then add your other containers to. additionally we have another network configured which will be used for prometheus metrics. we have revealed 3 ports: 80, 8080 and 443. 8080 being the dashboard port. </p>
+<p>and the traefik.toml configuration:</p>
+<div class="highlight"><pre><span></span>defaultEntryPoints = [&quot;http&quot;, &quot;https&quot;]
+logLevel = &quot;ERROR&quot;
+
+[api]
+entryPoint = &quot;traefik&quot;
+debug = true
+dashboard = true
+  [api.statistics]
+
+[entryPoints]
+  [entryPoints.traefik]
+    address = &quot;:8080&quot;
+  [entryPoints.traefik.auth.basic]
+    users = [&quot;bob:passwordbase64encoded.&quot;]
+  [entryPoints.http]
+    address = &quot;:80&quot;
+
+[metrics]
+  [metrics.prometheus]
+    entryPoint = &quot;traefik&quot;
+    buckets = [0.1,0.3,1.2,5.0]
+
+[docker]
+endpoint = &quot;unix:///var/run/docker.sock&quot;
+domain = &quot;j0nn.com&quot;
+watch = true
+exposedbydefault = true
+network = &quot;network&quot;
+</pre></div>
+
+
+<p>finally, let's look at an example containers docker-compose configuration. The example I took is thegoose.house, a gaming organization and community I manage the servers for </p>
+<div class="highlight"><pre><span></span>   mysql: 
+   labels:
+    - traefik.enable=false
+    volumes:
+    - ./wordpressdbdump.sql:/docker-entrypoint-initdb.d/backup.sql.gz
+    - db_data:/var/lib/mysql
+    networks:
+     - wordpress
+
+   wordpress:
+    image: wordpress
+    restart: always
+    environment:
+    labels:
+     - traefik.backend=wordpress
+     - traefik.frontend.rule=Host:wordpresssite.org, www.wordpresssite.org
+     - traefik.docker.network=network
+     - traefik.port=80
+     - traefik.enable=true
+    volumes:
+      - ./wordpress:/var/www/html
+    networks:
+      - network
+      - wordpress
+</pre></div>
+
+
+<p>soon I will have a LetsEncrypt container working.</p>
+<h3>sources / further reading:</h3>
+<ol>
+<li><a href="https://docs.traefik.io/basics/">Traefik documentation</a></li>
+<li><a href="https://hub.docker.com/_/wordpress/">Docker wordpress</a></li>
+</ol>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

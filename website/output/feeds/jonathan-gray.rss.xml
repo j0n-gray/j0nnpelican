@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel><title>The name of your website - Jonathan Gray</title><link>/</link><description></description><lastBuildDate>Tue, 22 May 2018 23:22:00 +0200</lastBuildDate><item><title>Monitoring diskspace using Python</title><link>/monitoring-diskspace-using-python.html</link><description>&lt;p&gt;This could be done much easier in bash but the point was to practice Python.
+There is also the future plan to use HTTP POST requests to send this data to
+a web UI.&lt;/p&gt;
+&lt;p&gt;In retrospect I think using subprocess library and piping the output to stdout
+would have been …&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Jonathan Gray</dc:creator><pubDate>Tue, 22 May 2018 23:22:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-05-22:/monitoring-diskspace-using-python.html</guid><category>monitoring</category><category>python</category><category>coding</category><category>linux</category><category>scripting</category></item><item><title>SELinux contexts</title><link>/selinux-contexts.html</link><description>&lt;h2&gt;SELinux contexts - what to look for&lt;/h2&gt;
+&lt;p&gt;SELINUX RESTORE, ADD, DELETE CONTEXTS&lt;/p&gt;
+&lt;h3&gt;RESTORING CONTEXTS&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;- Could use autorelabel
+- touch /.autorelabel
+- /.autorelabel
+- On next reboot it will relabel everything based on
+proper context
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;or use &lt;strong&gt;restorecon&lt;/strong&gt; command.&lt;/p&gt;
+&lt;h3&gt;CONTEXTS CONTROLLED BY&lt;/h3&gt;
+&lt;p&gt;semanage fcontext -l &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;- Reccomended to use context as defined in semanage fcontext ONLY …&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Jonathan Gray</dc:creator><pubDate>Mon, 21 May 2018 23:22:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-05-21:/selinux-contexts.html</guid><category>SELinux</category><category>Red Hat</category><category>Linux</category><category>Security</category></item></channel></rss>

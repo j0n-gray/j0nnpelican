@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel><title>The name of your website - Author name</title><link>/</link><description></description><lastBuildDate>Mon, 02 Jul 2018 15:24:00 +0200</lastBuildDate><item><title>open tcp socket directly in script</title><link>/open-tcp-socket-directly-in-script.html</link><description>&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; host in &lt;span class="nv"&gt;$hosts&lt;/span&gt;
+&lt;span class="k"&gt;do&lt;/span&gt;
+timeout &lt;span class="m"&gt;5&lt;/span&gt; bash -c &lt;span class="s2"&gt;&amp;quot;&amp;amp;lt;/dev/tcp/&lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="c1"&gt;#124 exit status means connection unsuccessful&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$?&lt;/span&gt; -eq &lt;span class="m"&gt;124&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;then&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;cannot connect to &lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;:&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;else&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot; successful connection to &lt;/span&gt;&lt;span class="nv"&gt;$host …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Author name</dc:creator><pubDate>Mon, 02 Jul 2018 15:24:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-07-02:/open-tcp-socket-directly-in-script.html</guid><category>linux</category><category>bash</category><category>scripting</category><category>automation</category><category>security</category></item><item><title>automate SSH connectivity checks</title><link>/automate-ssh-connectivity-checks.html</link><description>&lt;p&gt;say you need to test ssh connectivity to possibly hundreds of servers, you can automate this using
+a while loop in bash.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="c1"&gt;# SSH connectivity &amp;amp;amp;&amp;amp;amp; authentication checks&lt;/span&gt;
+
+&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;read&lt;/span&gt; host&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/span&gt; ssh_output.txt &lt;span class="p"&gt;;&lt;/span&gt;  ssh -T -o &lt;span class="nv"&gt;ConnectTimeout …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Author name</dc:creator><pubDate>Mon, 02 Jul 2018 14:59:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-07-02:/automate-ssh-connectivity-checks.html</guid><category>linux</category><category>bash</category><category>scripting</category><category>automation</category></item><item><title>Mounting isos</title><link>/mounting-isos.html</link><description>&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mount -t iso9660 -o loop CentOS-7-x86_64-Everything-1804.iso.1 /mnt/everything/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;extra reading&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://linux.die.net/man/8/mount"&gt;mount man page&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;search for loop devices in google.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Author name</dc:creator><pubDate>Fri, 29 Jun 2018 15:22:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-06-29:/mounting-isos.html</guid><category>linux</category><category>system administration</category></item><item><title>A concise primer on filesystems &amp; block devices</title><link>/a-concise-primer-on-filesystems-block-devices.html</link><description>&lt;h3&gt;lsblk&lt;/h3&gt;
+&lt;p&gt;hard drives are a type of block device in unix systems. they usually follow the format of /dev/sdx &lt;/p&gt;
+&lt;p&gt;checking all physical hdds and partitions available [ useful because it picks up unmounted hdds too]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;NAME                     MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+sda                        8:0    0 238.5G  0 …&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Author name</dc:creator><pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-06-28:/a-concise-primer-on-filesystems-block-devices.html</guid><category>linux</category><category>system administration</category></item><item><title>Using NMAP to enumerate ciphers and find vulnerabilities</title><link>/using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html</link><description>&lt;p&gt;in an ideal world we are all using TLS 1.2 with strong ciphers for application layer internet
+facing  protocols such as HTTPS and SMTP. With NMAP we can quickly discover if this is the case:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo nmap -Sv --script ssl-enumerate-ciphers -p 443 localhost &amp;amp;lt;&amp;amp;lt; replace as needed
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;example …&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Author name</dc:creator><pubDate>Sat, 26 May 2018 13:00:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-05-26:/using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html</guid><category>linux</category><category>security</category></item><item><title>A refresher on Find and Locate</title><link>/a-refresher-on-find-and-locate.html</link><description>&lt;h3&gt;LOCATE&lt;/h3&gt;
+&lt;p&gt;Very fast way of finding a file on a system as compared to find.&lt;/p&gt;
+&lt;p&gt;caches all files within a database . updated using a cronjob on a regular basis.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install mlocate
+
+locate httpd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;if file not findable, then you may need to manually update database using:::&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;updatedb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;FIND&lt;/h3&gt;
+&lt;p&gt;more …&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Author name</dc:creator><pubDate>Sun, 20 May 2018 23:22:00 +0200</pubDate><guid isPermaLink="false">tag:None,2018-05-20:/a-refresher-on-find-and-locate.html</guid><category>linux</category><category>system administration</category></item></channel></rss>

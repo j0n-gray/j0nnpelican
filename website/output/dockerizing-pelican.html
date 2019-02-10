@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="linux, DevOps">
+
+  <title>
+    Jonathan Gray
+&ndash; Dockerizing Pelican  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./dockerizing-pelican.html">Dockerizing Pelican</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Mon 22 October 2018</p>
+ Tags:
+      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/devops.html">#DevOps</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>I took some inspiration from an existing Pelican docker image, except I found that
+the Dockerfile was a bit too bulky for my liking - I would also need to modify the Makefile to get the 
+docker container be recognised and used by traefik as the reverse proxy.</p>
+<p>For the Dockerfile I have tried to trim the image down as much as possible by using
+Python's alpine image. This leaves us with a compact Dockerfile of minimal size:</p>
+<div class="highlight"><pre><span></span><span class="n">FROM</span> <span class="n">python</span><span class="p">:</span><span class="n">alpine3</span><span class="o">.</span><span class="mi">8</span>
+
+<span class="n">RUN</span> <span class="n">apk</span> <span class="n">add</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span> <span class="o">--</span><span class="n">update</span> <span class="n">make</span> \
+        <span class="n">bash</span> <span class="o">&amp;&amp;</span> \
+    <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pelican</span> <span class="n">Markdown</span> <span class="n">ghp</span><span class="o">-</span><span class="kn">import</span> <span class="nn">shovel</span>
+
+<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">srv</span><span class="o">/</span><span class="n">pelican</span><span class="o">-</span><span class="n">website</span>
+
+<span class="n">CMD</span> <span class="n">PORT</span><span class="o">=</span><span class="mi">80</span> <span class="n">make</span> <span class="n">devserver</span>
+</pre></div>
+
+
+<p>Using a MakeFile, we can add some aliases to make building and running
+the container easy. For example:</p>
+<div class="highlight"><pre><span></span>docker-build:
+        docker build -t j0nn/pelican .
+docker-kill:
+        docker stop pelican
+        docker rm pelican
+</pre></div>
+
+
+<p>And to get this running with traefik we add an additional "docker-run" argument to the Makefile:</p>
+<div class="highlight"><pre><span></span><span class="nf">docker-run</span><span class="o">:</span>
+<span class="nf">docker run --name=&quot;pelican&quot; --network=&quot;network&quot; -d -v $(CURDIR)/website</span><span class="o">:</span>/<span class="n">srv</span>/<span class="n">pelican</span>-<span class="n">website</span> -<span class="n">l</span> <span class="n">traefik</span>.<span class="n">frontend</span>.<span class="n">rule</span>=<span class="n">Host</span>:<span class="n">hostname</span>.<span class="n">com</span><span class="p">,</span><span class="n">www</span>.<span class="n">hostname</span>.<span class="n">com</span> -<span class="n">l</span> <span class="n">traefik</span>.<span class="n">port</span>=80 -<span class="n">l</span> <span class="n">traefik</span>.<span class="n">docker</span>.<span class="n">network</span>=<span class="n">network</span> -<span class="n">l</span> <span class="n">traefik</span>.<span class="n">enable</span>=<span class="n">true</span> <span class="n">j</span>0<span class="n">nn</span>/<span class="n">pelican</span>
+</pre></div>
+
+
+<p>we have successfully dockerized pelican!</p>
+<h3>sources / further reading:</h3>
+<ol>
+<li><a href="https://github.com/jderuere/docker-pelican">jderuere/pelican</a></li>
+<li><a href="https://hub.docker.com/_/python/">Docker Python Image</a></li>
+<li><a href="https://docs.traefik.io/">Traefik documentation</a></li>
+</ol>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

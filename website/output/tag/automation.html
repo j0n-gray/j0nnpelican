@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="../theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="../">
+  <link rel="stylesheet" type="text/css" href="../theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="../theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+
+  <title>
+    Jonathan Gray
+&ndash; Tag: automation  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href="..">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="../archives.html"><i class="fa fa-archive"></i> Archive</a>
+&gt; Tag: automation
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="../systemd-timer-units-cron.html">SystemD Timer Units > Cron</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Sun 21 October 2018</p>
+ Tags:
+      <a href="../tag/linux.html">#linux</a>,      <a href="../tag/automation.html">#automation</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>Using a SystemD service with timers is a great alternative to Cron. </p>
+<p>This command is useful to have visibility over all units :</p>
+<div class="highlight"><pre><span></span>systemctl list-units
+</pre></div>
+
+
+<p>Let's create a unit. First, we need a service</p>
+<div class="highlight"><pre><span></span>vim /etc/systemd/system/RunMyScript.service
+</pre></div>
+
+
+<p>You are saying create a unit, which is a service, the …</p>
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article__title">
+    <h1><a href="../open-tcp-socket-directly-in-script.html">open tcp socket directly in script</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Mon 02 July 2018</p>
+ Tags:
+      <a href="../tag/linux.html">#linux</a>,      <a href="../tag/bash.html">#bash</a>,      <a href="../tag/scripting.html">#scripting</a>,      <a href="../tag/automation.html">#automation</a>,      <a href="../tag/security.html">#security</a>    </p>
+  </div>
+  <div class="article__text">
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="k">for</span> host in <span class="nv">$hosts</span>
+<span class="k">do</span>
+timeout <span class="m">5</span> bash -c <span class="s2">&quot;&amp;lt;/dev/tcp/</span><span class="nv">$host</span><span class="s2">/</span><span class="nv">$port</span><span class="s2">&quot;</span>
+<span class="c1">#124 exit status means connection unsuccessful</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">124</span> <span class="o">]</span>
+<span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">&quot;cannot connect to </span><span class="nv">$host</span><span class="s2">:</span><span class="nv">$port</span><span class="s2">&quot;</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> <span class="s2">&quot; successful connection to </span><span class="nv">$host …</span></pre></div></td></tr></table>
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article__title">
+    <h1><a href="../some-dodgy-bash-loop-to-ssh-to-a-lot-of-servers-note-ansible-would-be-better.html">some dodgy bash loop to SSH to a lot of servers (note: ansible would be better)</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Mon 02 July 2018</p>
+ Tags:
+      <a href="../tag/linux.html">#linux</a>,      <a href="../tag/bash.html">#bash</a>,      <a href="../tag/scripting.html">#scripting</a>,      <a href="../tag/automation.html">#automation</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>this is in absence of anything else. e.g. salt, ansible.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># SSH connectivity &amp;amp;&amp;amp; authentication checks</span>
+
+<span class="k">while</span> <span class="nb">read</span> host<span class="p">;</span> <span class="k">do</span>
+    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">&quot;</span> <span class="p">&amp;</span>gt<span class="p">;&amp;</span>gt<span class="p">;</span> ssh_output.txt <span class="p">;</span>  ssh -T -o <span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">10</span> -o <span class="nv">PasswordAuthentication</span><span class="o">=</span>no <span class="nv">$host</span> <span class="m">2</span><span class="p">&amp;</span>gt<span class="p">;&amp;</span>gt<span class="p">;</span>ssh_output.txt
+<span class="k">done …</span></pre></div></td></tr></table>
+  </div>
+</article>
+
+<div class="pagination">
+    <ul>
+        <li class="pagination__prev">
+            <div class="pagination__prev--none">&laquo;</div>
+        </li>
+
+
+
+          <li>
+            <a class="pagination__page--current" href="../tag/automation.html">1</a>
+          </li>
+
+        <li class="pagination__next">
+            <div class="pagination__next--none">&raquo;</div>
+        </li>
+    </ul>
+</div>
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="../pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="../pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

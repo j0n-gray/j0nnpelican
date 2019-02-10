@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="linux, automation">
+
+  <title>
+    Jonathan Gray
+&ndash; SystemD Timer Units > Cron  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./systemd-timer-units-cron.html">SystemD Timer Units > Cron</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Sun 21 October 2018</p>
+ Tags:
+      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/automation.html">#automation</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>Using a SystemD service with timers is a great alternative to Cron. </p>
+<p>This command is useful to have visibility over all units :</p>
+<div class="highlight"><pre><span></span>systemctl list-units
+</pre></div>
+
+
+<p>Let's create a unit. First, we need a service</p>
+<div class="highlight"><pre><span></span>vim /etc/systemd/system/RunMyScript.service
+</pre></div>
+
+
+<p>You are saying create a unit, which is a service, the
+service runs a script and that you wish to run it
+after multi-user.target. Multi-user target is the equivalent
+to run level 3 which is a non-graphical multi user system.
+This is what your system will be (at least) in most cases.</p>
+<div class="highlight"><pre><span></span><span class="k">[Unit]</span>
+
+<span class="na">Description</span><span class="o">=</span> <span class="s">some Python script that does something</span>
+<span class="na">After</span><span class="o">=</span><span class="s">multi-user.target</span>
+
+<span class="k">[Service]</span>
+<span class="na">ExecStart</span><span class="o">=</span> <span class="s">/usr/bin/python /usr/local/bin/somescript.py</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</pre></div>
+
+
+<p>Save then</p>
+<div class="highlight"><pre><span></span>chmod 664 /etc/systemd/system/RunMyScript.service
+</pre></div>
+
+
+<p>Reload SystemD:</p>
+<div class="highlight"><pre><span></span>systemctl daemon-reload
+</pre></div>
+
+
+<p>Then you can start the service with</p>
+<div class="highlight"><pre><span></span>systemctl start RunMyScript.service
+</pre></div>
+
+
+<p>Now create the timer</p>
+<div class="highlight"><pre><span></span>vi /etc/systemd/system/RunMyScript.timer
+</pre></div>
+
+
+<p>Then paste the following</p>
+<div class="highlight"><pre><span></span><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Run my script at midnight every day</span>
+
+<span class="k">[Timer]</span>
+<span class="na">OnCalendar</span><span class="o">=</span><span class="s">*-*-* 00:00:00</span>
+<span class="na">Unit</span><span class="o">=</span><span class="s">RunMyScript.timer</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</pre></div>
+
+
+<p>This time you need to enable it at boot, then start the timer.</p>
+<div class="highlight"><pre><span></span>systemctl enable RunMyScript.timer
+</pre></div>
+
+
+<p>Then start it</p>
+<div class="highlight"><pre><span></span>systemctl start backup.timer
+</pre></div>
+
+
+<p>If you make any changes to the timer you need to run</p>
+<div class="highlight"><pre><span></span>systemctl daemon-reload
+</pre></div>
+
+
+<p>But back to the original question: why use SystemD timers? Firstly, SystemD timers can be accurate to the unit
+of miliseconds or even further should you want such accuracy. Secondly, since its now a systemd service managed
+by a timer, you can very easily manage it with the normal systemctl commands.</p>
+<p>This also means you have logging for free! Simply run journalctl command to check the unit. You can also see 
+similar output (but less verbose) in systemctl status RunMyScript.</p>
+<div class="highlight"><pre><span></span>journalctl -xb -u RunMyScript
+</pre></div>
+
+
+<h3>Conclusion:::</h3>
+<p>SystemD units are good to use when applicable.</p>
+<h3>sources / further reading:</h3>
+<ol>
+<li><a href="https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files">Digital Ocean Guide On SystemD units</a></li>
+<li><a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html">SystemD manpage</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/systemd">Arch Linux Wiki On SystemD</a></li>
+</ol>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

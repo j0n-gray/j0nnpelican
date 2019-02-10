@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="SELinux, Red Hat, Linux, Security">
+
+  <title>
+    Jonathan Gray
+&ndash; SELinux contexts  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./selinux-contexts.html">SELinux contexts</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Mon 21 May 2018</p>
+ Tags:
+      <a href="./tag/selinux.html">#SELinux</a>,      <a href="./tag/red-hat.html">#Red Hat</a>,      <a href="./tag/linux.html">#Linux</a>,      <a href="./tag/security.html">#Security</a>    </p>
+  </div>
+  <div class="article__text">
+    <h2>SELinux contexts - what to look for</h2>
+<p>SELINUX RESTORE, ADD, DELETE CONTEXTS</p>
+<h3>RESTORING CONTEXTS</h3>
+<div class="highlight"><pre><span></span>- Could use autorelabel
+- touch /.autorelabel
+- /.autorelabel
+- On next reboot it will relabel everything based on
+proper context
+</pre></div>
+
+
+<p>or use <strong>restorecon</strong> command.</p>
+<h3>CONTEXTS CONTROLLED BY</h3>
+<p>semanage fcontext -l </p>
+<div class="highlight"><pre><span></span>- Reccomended to use context as defined in semanage fcontext ONLY
+- NOT set them manually.
+- You can use restorecon to restore context based on defaults
+</pre></div>
+
+
+<h3>ADDING CONTEXT TO DIRECTORY</h3>
+<p>let us say you set apache DocumentRoot and DirectoryIndex to /content instead of /var/www</p>
+<div class="highlight"><pre><span></span>[root@j0nn91 content]# ls -Z
+-rw-r--r--. root root unconfined_u:object_r:default_t:s0 index.html
+</pre></div>
+
+
+<p>Problem is index.html does not have httpd context, so httpd service will not have access to the file.
+Therefore page will be "permission denied" <strong>REGARDLESS OF PERMISSIONS</strong>.</p>
+<p>so you need to set the semanage context for this directory to reflect /var/www:::</p>
+<div class="highlight"><pre><span></span>/var/www(/.*)?      all files          system_u:object_r:httpd_sys_content_t:s0
+</pre></div>
+
+
+<h3>COMMAND TO ADD CONTEXT TO DIRECTORY</h3>
+<div class="highlight"><pre><span></span>semanage fcontext -l | grep /var/www --&amp;gt; can take context and also (/.*) if you forget
+
+semanage fcontext -a -t httpd_sys_content &#39;/content(/.*)?&#39;
+
+[root@j0nn91 content]# semanage fcontext -a -t httpd_sys_content_t &#39;/content(/.*)?&#39;
+
+[root@j0nn91 content]# ls -Z
+-rw-r--r--. root root unconfined_u:object_r:default_t:s0 index.html
+</pre></div>
+
+
+<p>But file is still default_t. Need to do restorecon to restore to semanage defaults.</p>
+<h3>RESTORECON TO SET CONTEXT BACK TO DEFAULTS</h3>
+<div class="highlight"><pre><span></span>restorecon -Rv /content
+</pre></div>
+
+
+<h3>TO DELETE NEWLY SET CONTEXT</h3>
+<div class="highlight"><pre><span></span>[root@j0nn91 content]# semanage fcontext -l | grep /content
+/content(/.*)?                                     all files          system_u:object_r:httpd_sys_content_t:s0
+
+
+[root@j0nn91 content]# semanage fcontext -d &quot;/content(/.*)?&quot;
+</pre></div>
+
+
+<p>The biggest thing to know with SELinux when you are troubleshooting is improper context
+and incorrect labelling of files can be the main culprits.</p>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

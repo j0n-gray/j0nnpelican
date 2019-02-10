@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="monitoring, python, coding, linux, scripting">
+
+  <title>
+    Jonathan Gray
+&ndash; Monitoring diskspace using Python  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./monitoring-diskspace-using-python.html">Monitoring diskspace using Python</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Tue 22 May 2018</p>
+ Tags:
+      <a href="./tag/monitoring.html">#monitoring</a>,      <a href="./tag/python.html">#python</a>,      <a href="./tag/coding.html">#coding</a>,      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/scripting.html">#scripting</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>This could be done much easier in bash but the point was to practice Python.
+There is also the future plan to use HTTP POST requests to send this data to
+a web UI.</p>
+<p>In retrospect I think using subprocess library and piping the output to stdout
+would have been more efficent.</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3.6</span>
+
+<span class="kn">import</span> <span class="nn">smtplib</span>
+
+<span class="sd">&quot;&quot;&quot; script that gets df -h output &gt; sorts it</span>
+<span class="sd">compares output to threshold</span>
+<span class="sd">if output exceed threshold send alert via email</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">define</span> <span class="n">partition</span> <span class="ow">and</span> <span class="n">threshold</span> <span class="n">parameters</span>
+
+<span class="n">partition</span> <span class="o">=</span> <span class="s1">&#39;/home&#39;</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="mi">85</span>
+
+<span class="c1">#use smtplib to send alert mail to administrator</span>
+
+<span class="k">def</span> <span class="nf">send_alert_mail</span><span class="p">():</span>
+<span class="n">server</span><span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;smtp.gmail.com&#39;</span><span class="p">,</span> <span class="mi">587</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
+<span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s2">&quot;emailAddress&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;alert:: disk space is beyond 85% threshold&quot;</span><span class="p">)</span>
+<span class="c1"># send alert email using parameters above</span>
+<span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="s2">&quot;FROM&quot;</span><span class="p">,</span> <span class="s2">&quot;TO&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Checking partitions for how much space is available...</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># opens disk_output.txt with df -h output (appended using a cronjob)</span>
+<span class="c1"># split lines from file into a list using for loop</span>
+<span class="c1"># acquire partition and threshold values using list indexing</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;disk_output.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>  <span class="c1">### cronjob ammends df -h output to txt file. could use subprocess &amp; stdout also</span>
+<span class="k">for</span> <span class="n">lines</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<span class="n">split_line</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">split_line</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="n">partition</span><span class="p">:</span>
+<span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">split_line</span><span class="p">[</span><span class="mi">4</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;alert:: </span><span class="se">\t</span><span class="s2"> disk space in {partition} is beyond {threshold}%&quot;</span><span class="p">)</span>
+<span class="n">send_alert_mail</span><span class="p">()</span>
+</pre></div>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

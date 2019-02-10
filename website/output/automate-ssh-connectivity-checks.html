@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="linux, bash, scripting, automation">
+
+  <title>
+    Jonathan Gray
+&ndash; automate SSH connectivity checks  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./automate-ssh-connectivity-checks.html">automate SSH connectivity checks</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Mon 02 July 2018</p>
+ Tags:
+      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/bash.html">#bash</a>,      <a href="./tag/scripting.html">#scripting</a>,      <a href="./tag/automation.html">#automation</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>say you need to test ssh connectivity to possibly hundreds of servers, you can automate this using
+a while loop in bash.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># SSH connectivity &amp;amp;&amp;amp; authentication checks</span>
+
+<span class="k">while</span> <span class="nb">read</span> host<span class="p">;</span> <span class="k">do</span>
+    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">&quot;</span> <span class="p">&amp;</span>gt<span class="p">;&amp;</span>gt<span class="p">;</span> ssh_output.txt <span class="p">;</span>  ssh -T -o <span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">10</span> -o <span class="nv">PasswordAuthentication</span><span class="o">=</span>no <span class="nv">$host</span> <span class="m">2</span><span class="p">&amp;</span>gt<span class="p">;&amp;</span>gt<span class="p">;</span>ssh_output.txt
+<span class="k">done</span> <span class="p">&amp;</span>lt<span class="p">;</span> servers.txt
+</pre></div>
+</td></tr></table>
+
+<p>note that we want to test two things: (1) connectivity and (2) whether authentication works or not. therefore simply port scanning will not
+be sufficent here.</p>
+<p>obviously we can add more to this. for example, we could set this to alert in cron via mail or use sendmail to post an alert.</p>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p>DevOps Engineer / Python / Linux / Cyber Security</p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

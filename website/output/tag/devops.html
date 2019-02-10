@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="../theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="../">
+  <link rel="stylesheet" type="text/css" href="../theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="../theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="../theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+
+  <title>
+    Jonathan Gray
+&ndash; Tag: DevOps  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href="..">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="../archives.html"><i class="fa fa-archive"></i> Archive</a>
+&gt; Tag: DevOps
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="../ansible-basics.html">Ansible basics</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Sat 12 January 2019</p>
+ Tags:
+      <a href="../tag/linux.html">#linux</a>,      <a href="../tag/devops.html">#DevOps</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>In this article I will dump some really simple Ansible notes to get you up and running.
+So I make a simple playbook.yml</p>
+<div class="highlight"><pre><span></span>- name: copy a simple bash script and run it
+  hosts: hosts
+  remote_user: user
+  tasks:
+  - name: copy script
+    copy: src=/home/user/script.sh dest=/root/script …</pre></div>
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article__title">
+    <h1><a href="../my-traefik-configuration-docker-reverse-proxy.html">My Traefik Configuration - Docker Reverse Proxy</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Wed 09 January 2019</p>
+ Tags:
+      <a href="../tag/linux.html">#linux</a>,      <a href="../tag/devops.html">#DevOps</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>In this article I will run through my Traefik configuration, which currently handles routing and load-balancing (in future) to 22 docker containers (5+ wordpresses, prometheus and this blog).</p>
+<p>My traefik setup consists of a .toml file and uses docker-compose. Firstly, looking at the docker-compose.yml</p>
+<div class="highlight"><pre><span></span>version: &#39;2&#39;
+
+services:
+  rnetwork:
+    image …</pre></div>
+  </div>
+</article>
+<hr />
+<article>
+  <div class="article__title">
+    <h1><a href="../dockerizing-pelican.html">Dockerizing Pelican</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Mon 22 October 2018</p>
+ Tags:
+      <a href="../tag/linux.html">#linux</a>,      <a href="../tag/devops.html">#DevOps</a>    </p>
+  </div>
+  <div class="article__text">
+    <p>I took some inspiration from an existing Pelican docker image, except I found that
+the Dockerfile was a bit too bulky for my liking - I would also need to modify the Makefile to get the 
+docker container be recognised and used by traefik as the reverse proxy.</p>
+<p>For the Dockerfile …</p>
+  </div>
+</article>
+
+<div class="pagination">
+    <ul>
+        <li class="pagination__prev">
+            <div class="pagination__prev--none">&laquo;</div>
+        </li>
+
+
+
+          <li>
+            <a class="pagination__page--current" href="../tag/devops.html">1</a>
+          </li>
+
+        <li class="pagination__next">
+            <div class="pagination__next--none">&raquo;</div>
+        </li>
+    </ul>
+</div>
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="../pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="../pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

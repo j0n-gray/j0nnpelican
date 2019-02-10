@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="./theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+
+<meta name="author" content="Jonathan Gray" />
+<meta name="description" content="Monitoring diskspace using Python Below is a script to monitor output from Linux df -h command. I use a cronjob that runs every 2 minutes to ammend df -h output to a text file then use this script to sort through that data. This could be done much easier in …" />
+<meta name="keywords" content="monitoring, python, coding, linux, scripting">
+<meta property="og:site_name" content="Jonathan Gray"/>
+<meta property="og:title" content="Linux Python diskspace script"/>
+<meta property="og:description" content="Monitoring diskspace using Python Below is a script to monitor output from Linux df -h command. I use a cronjob that runs every 2 minutes to ammend df -h output to a text file then use this script to sort through that data. This could be done much easier in …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="./linux-python-diskspace-script.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2018-05-20 23:22:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="./author/jonathan-gray.html">
+<meta property="article:section" content="python"/>
+<meta property="article:tag" content="monitoring"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="coding"/>
+<meta property="article:tag" content="linux"/>
+<meta property="article:tag" content="scripting"/>
+<meta property="og:image" content="/theme/img/green.jpg">
+
+  <title>Jonathan Gray &ndash; Linux Python diskspace script</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href=".">
+        <img src="/theme/img/green.jpg" alt="Jonathan Gray" title="Jonathan Gray">
+      </a>
+      <h1><a href=".">Jonathan Gray</a></h1>
+
+<p>Devops Engineer >>> Linux, Coding, Cyber Security</p>
+      <nav>
+        <ul class="list">
+          <li><a href="./pages/about-me.html#about-me">About me</a></li>
+          <li><a href="./pages/projects.html#projects">Projects</a></li>
+
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-twitter" href="https://twitter.com/j0nn_gray" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-github" href="https://github.com/j0nn_gray" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-google" href="https://plus.google.com/u/0/117609554684039780311" target="_blank"><i class="fa fa-google"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+
+<article class="single">
+  <header>
+    <h1 id="linux-python-diskspace-script">Linux Python diskspace script</h1>
+    <p>
+          Posted on Sun 20 May 2018 in <a href="./category/python.html">python</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <h2>Monitoring diskspace using Python</h2>
+<p>Below is a script to monitor output from Linux df -h command.
+I use a cronjob that runs every 2 minutes to ammend df -h output
+to a text file then use this script to sort through that data.</p>
+<p>This could be done much easier in bash but the point was to practice Python.
+There is also the future plan to use HTTP POST requests to send this data to
+a web UI.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">#!/usr/bin/env python3.6</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">smtplib</span>
+
+<span class="s2">&quot;&quot;&quot; script that gets df -h output &gt; sorts it</span>
+<span class="s2">compares output to threshold</span>
+<span class="s2">if output exceed threshold send alert via email</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s s-Atom">define</span> <span class="s s-Atom">partition</span> <span class="s s-Atom">and</span> <span class="s s-Atom">threshold</span> <span class="s s-Atom">parameters</span>
+
+<span class="s s-Atom">partition</span> <span class="o">=</span> <span class="s s-Atom">&#39;/home&#39;</span>
+<span class="s s-Atom">threshold</span> <span class="o">=</span> <span class="mi">85</span>
+
+<span class="s s-Atom">use</span> <span class="s s-Atom">smtplib</span> <span class="s s-Atom">using</span> <span class="s s-Atom">gmail</span> <span class="s s-Atom">server</span> <span class="s s-Atom">to</span> <span class="s s-Atom">send</span> <span class="s s-Atom">a</span> <span class="nv">TLS</span> <span class="s s-Atom">encrypted</span> <span class="s s-Atom">email</span> <span class="s s-Atom">to</span> <span class="s s-Atom">admin@thegoose</span><span class="p">.</span><span class="s s-Atom">house</span>
+
+<span class="s s-Atom">def</span> <span class="nf">send_alert_mail</span><span class="p">()</span><span class="s s-Atom">:</span>
+<span class="s s-Atom">server</span><span class="o">=</span> <span class="s s-Atom">smtplib</span><span class="p">.</span><span class="nv">SMTP</span><span class="p">(</span><span class="s s-Atom">&#39;smtp.gmail.com&#39;</span><span class="p">,</span> <span class="mi">587</span><span class="p">)</span>
+<span class="s s-Atom">server</span><span class="p">.</span><span class="nf">starttls</span><span class="p">()</span>
+<span class="s s-Atom">server</span><span class="p">.</span><span class="nf">login</span><span class="p">(</span><span class="s2">&quot;emailAddress&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
+<span class="s s-Atom">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;alert:: disk space is beyond 85% threshold&quot;</span><span class="p">)</span>
+<span class="c1"># send alert email using parameters above</span>
+<span class="s s-Atom">server</span><span class="p">.</span><span class="nf">sendmail</span><span class="p">(</span><span class="s2">&quot;FROM&quot;</span><span class="p">,</span> <span class="s2">&quot;TO&quot;</span><span class="p">,</span> <span class="s s-Atom">msg</span><span class="p">)</span>
+<span class="s s-Atom">server</span><span class="p">.</span><span class="nf">quit</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Checking partitions for how much space is available...</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># opens disk_output.txt with df -h output (appended using a cronjob)</span>
+<span class="c1"># split lines from file into a list using for loop</span>
+<span class="c1"># acquire partition and threshold values using list indexing</span>
+
+<span class="s s-Atom">with</span> <span class="nf">open</span><span class="p">(</span><span class="s s-Atom">&#39;disk_output.txt&#39;</span><span class="p">,</span> <span class="s s-Atom">&#39;r&#39;</span><span class="p">)</span> <span class="s s-Atom">as</span> <span class="nn">f</span><span class="p">:</span>
+<span class="s s-Atom">for</span> <span class="s s-Atom">lines</span> <span class="s s-Atom">in</span> <span class="nn">f</span><span class="p">:</span>
+<span class="s s-Atom">split_line</span> <span class="o">=</span> <span class="s s-Atom">lines</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span>
+<span class="s s-Atom">if</span> <span class="s s-Atom">split_line</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="nn">partition</span><span class="p">:</span>
+<span class="s s-Atom">if</span> <span class="nf">int</span><span class="p">(</span><span class="s s-Atom">split_line</span><span class="p">[</span><span class="mi">4</span><span class="p">][:-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="nn">threshold</span><span class="p">:</span>
+<span class="nf">print</span><span class="p">(</span><span class="s s-Atom">f</span><span class="s2">&quot;alert:: \t disk space in {partition} is beyond {threshold}%&quot;</span><span class="p">)</span>
+<span class="nf">send_alert_mail</span><span class="p">()</span>
+</pre></div>
+</td></tr></table>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/monitoring.html">monitoring</a>
+      <a href="./tag/python.html">python</a>
+      <a href="./tag/coding.html">coding</a>
+      <a href="./tag/linux.html">linux</a>
+      <a href="./tag/scripting.html">scripting</a>
+    </p>
+  </div>
+
+
+
+
+</article>
+
+    <footer>
+<p>&copy; Jonathan Gray </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Jonathan Gray ",
+  "url" : ".",
+  "image": "/theme/img/green.jpg",
+  "description": "Linux, Cyber Security, Coding"
+}
+</script>
+</body>
+</html>

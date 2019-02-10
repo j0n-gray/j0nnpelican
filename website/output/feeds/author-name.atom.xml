@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The name of your website - Author name</title><link href="/" rel="alternate"></link><link href="/feeds/author-name.atom.xml" rel="self"></link><id>/</id><updated>2018-07-02T15:24:00+02:00</updated><entry><title>open tcp socket directly in script</title><link href="/open-tcp-socket-directly-in-script.html" rel="alternate"></link><published>2018-07-02T15:24:00+02:00</published><updated>2018-07-02T15:24:00+02:00</updated><author><name>Author name</name></author><id>tag:None,2018-07-02:/open-tcp-socket-directly-in-script.html</id><summary type="html">&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; host in &lt;span class="nv"&gt;$hosts&lt;/span&gt;
+&lt;span class="k"&gt;do&lt;/span&gt;
+timeout &lt;span class="m"&gt;5&lt;/span&gt; bash -c &lt;span class="s2"&gt;&amp;quot;&amp;amp;lt;/dev/tcp/&lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="c1"&gt;#124 exit status means connection unsuccessful&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$?&lt;/span&gt; -eq &lt;span class="m"&gt;124&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;then&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;cannot connect to &lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;:&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;else&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot; successful connection to &lt;/span&gt;&lt;span class="nv"&gt;$host …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</summary><content type="html">&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; host in &lt;span class="nv"&gt;$hosts&lt;/span&gt;
+&lt;span class="k"&gt;do&lt;/span&gt;
+timeout &lt;span class="m"&gt;5&lt;/span&gt; bash -c &lt;span class="s2"&gt;&amp;quot;&amp;amp;lt;/dev/tcp/&lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="c1"&gt;#124 exit status means connection unsuccessful&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$?&lt;/span&gt; -eq &lt;span class="m"&gt;124&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;then&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;cannot connect to &lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;:&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;else&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot; successful connection to &lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;:&lt;/span&gt;&lt;span class="nv"&gt;$port&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;testing specific port on multiple hosts using direct tcp socket in absence of nmap,
+telnet and netcat&lt;/p&gt;</content><category term="linux"></category><category term="bash"></category><category term="scripting"></category><category term="automation"></category><category term="security"></category></entry><entry><title>automate SSH connectivity checks</title><link href="/automate-ssh-connectivity-checks.html" rel="alternate"></link><published>2018-07-02T14:59:00+02:00</published><updated>2018-07-02T14:59:00+02:00</updated><author><name>Author name</name></author><id>tag:None,2018-07-02:/automate-ssh-connectivity-checks.html</id><summary type="html">&lt;p&gt;say you need to test ssh connectivity to possibly hundreds of servers, you can automate this using
+a while loop in bash.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="c1"&gt;# SSH connectivity &amp;amp;amp;&amp;amp;amp; authentication checks&lt;/span&gt;
+
+&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;read&lt;/span&gt; host&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/span&gt; ssh_output.txt &lt;span class="p"&gt;;&lt;/span&gt;  ssh -T -o &lt;span class="nv"&gt;ConnectTimeout …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</summary><content type="html">&lt;p&gt;say you need to test ssh connectivity to possibly hundreds of servers, you can automate this using
+a while loop in bash.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="c1"&gt;# SSH connectivity &amp;amp;amp;&amp;amp;amp; authentication checks&lt;/span&gt;
+
+&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;read&lt;/span&gt; host&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/span&gt; ssh_output.txt &lt;span class="p"&gt;;&lt;/span&gt;  ssh -T -o &lt;span class="nv"&gt;ConnectTimeout&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt; -o &lt;span class="nv"&gt;PasswordAuthentication&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;no &lt;span class="nv"&gt;$host&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&amp;amp;&lt;/span&gt;gt&lt;span class="p"&gt;;&lt;/span&gt;ssh_output.txt
+&lt;span class="k"&gt;done&lt;/span&gt; &lt;span class="p"&gt;&amp;amp;&lt;/span&gt;lt&lt;span class="p"&gt;;&lt;/span&gt; servers.txt
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;note that we want to test two things: (1) connectivity and (2) whether authentication works or not. therefore simply port scanning will not
+be sufficent here.&lt;/p&gt;
+&lt;p&gt;obviously we can add more to this. for example, we could set this to alert in cron via mail or use sendmail to post an alert.&lt;/p&gt;</content><category term="linux"></category><category term="bash"></category><category term="scripting"></category><category term="automation"></category></entry><entry><title>Mounting isos</title><link href="/mounting-isos.html" rel="alternate"></link><published>2018-06-29T15:22:00+02:00</published><updated>2018-06-29T15:22:00+02:00</updated><author><name>Author name</name></author><id>tag:None,2018-06-29:/mounting-isos.html</id><summary type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mount -t iso9660 -o loop CentOS-7-x86_64-Everything-1804.iso.1 /mnt/everything/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;extra reading&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://linux.die.net/man/8/mount"&gt;mount man page&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;search for loop devices in google.&lt;/p&gt;</summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mount -t iso9660 -o loop CentOS-7-x86_64-Everything-1804.iso.1 /mnt/everything/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;extra reading&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://linux.die.net/man/8/mount"&gt;mount man page&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;search for loop devices in google.&lt;/p&gt;</content><category term="linux"></category><category term="system administration"></category></entry><entry><title>A concise primer on filesystems &amp; block devices</title><link href="/a-concise-primer-on-filesystems-block-devices.html" rel="alternate"></link><published>2018-06-28T00:00:00+02:00</published><updated>2018-06-28T00:00:00+02:00</updated><author><name>Author name</name></author><id>tag:None,2018-06-28:/a-concise-primer-on-filesystems-block-devices.html</id><summary type="html">&lt;h3&gt;lsblk&lt;/h3&gt;
+&lt;p&gt;hard drives are a type of block device in unix systems. they usually follow the format of /dev/sdx &lt;/p&gt;
+&lt;p&gt;checking all physical hdds and partitions available [ useful because it picks up unmounted hdds too]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;NAME                     MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+sda                        8:0    0 238.5G  0 …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h3&gt;lsblk&lt;/h3&gt;
+&lt;p&gt;hard drives are a type of block device in unix systems. they usually follow the format of /dev/sdx &lt;/p&gt;
+&lt;p&gt;checking all physical hdds and partitions available [ useful because it picks up unmounted hdds too]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;NAME                     MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+sda                        8:0    0 238.5G  0 disk
+sda1                       8:1    0  19.5G  0 part
+md1                        9:1    0  19.5G  0 raid1 /
+sda2                       8:2    0 218.5G  0 part
+md2                        9:2    0 218.4G  0 raid1 /home
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;blkid&lt;/h3&gt;
+&lt;p&gt;you want to get blkid of a device, because mounting by UUID is safer than by using the direct device path.
+the device path can change, the UUID cannot.  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/dev/loop0: UUID=&amp;quot;231ecc49-7c0a-4272-bf67-36dc110c711f&amp;quot; TYPE=&amp;quot;xfs&amp;quot;
+/dev/sda1: UUID=&amp;quot;8e3cb146-0db2-9380-a4d2-adc226fd5302&amp;quot; TYPE=&amp;quot;linux_raid_member&amp;quot; PARTUUID=&amp;quot;d5bfc4bd-01&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;/etc/fstab&lt;/h3&gt;
+&lt;p&gt;sudo vim /etc/fstab. example entry below&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;UUID=231ecc49-7c0a-4272-bf67-36dc110c711f /mnt/disk        ext4    defaults        0 0
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;you can mount everything in /etc/fstab with mount -a. this also tests if the /etc/fstab entry you created actually works.&lt;/p&gt;
+&lt;p&gt;use mount | grep "disk" to check if the disk is mounted.&lt;/p&gt;
+&lt;p&gt;or just mount | less &lt;/p&gt;
+&lt;h3&gt;tune2fs&lt;/h3&gt;
+&lt;p&gt;really useful for when you mount a large external storage disk &lt;/p&gt;
+&lt;p&gt;a lot of linux distros reserve 5% of space for new partitions for root user &amp;amp; system services. this in theory means even when you
+run out of disk space you can still login as the root user and make necessary changes to recover disk space.&lt;/p&gt;
+&lt;p&gt;this is not relevant for a disk that isnt mounted to the root FS, 5% can be a significant amount of space for larger disks. e.g. about 50gb for
+1TB. so we can free up this space.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tune2fs -m 0 /dev/sda1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;also
+    tune2fs -l /dev/sda1 &lt;/p&gt;
+&lt;p&gt;to view all specific disk information specifically::&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo tune2fs -l /dev/md1 | grep &amp;quot;Reserved&amp;quot;
+Reserved block count:     255986
+Reserved GDT blocks:      1022
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      0 (group root)
+&lt;/pre&gt;&lt;/div&gt;</content><category term="linux"></category><category term="system administration"></category></entry><entry><title>Using NMAP to enumerate ciphers and find vulnerabilities</title><link href="/using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html" rel="alternate"></link><published>2018-05-26T13:00:00+02:00</published><updated>2018-05-26T13:00:00+02:00</updated><author><name>Author name</name></author><id>tag:None,2018-05-26:/using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html</id><summary type="html">&lt;p&gt;in an ideal world we are all using TLS 1.2 with strong ciphers for application layer internet
+facing  protocols such as HTTPS and SMTP. With NMAP we can quickly discover if this is the case:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo nmap -Sv --script ssl-enumerate-ciphers -p 443 localhost &amp;amp;lt;&amp;amp;lt; replace as needed
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;example …&lt;/p&gt;</summary><content type="html">&lt;p&gt;in an ideal world we are all using TLS 1.2 with strong ciphers for application layer internet
+facing  protocols such as HTTPS and SMTP. With NMAP we can quickly discover if this is the case:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo nmap -Sv --script ssl-enumerate-ciphers -p 443 localhost &amp;amp;lt;&amp;amp;lt; replace as needed
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;example output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;PORT    STATE SERVICE REASON
+443/tcp open  https   syn-ack
+| ssl-enum-ciphers:
+|   TLSv1.0:
+|     ciphers:
+|       TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (secp256r1) - A
+|       TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (secp256r1) - A
+|       TLS_RSA_WITH_AES_128_CBC_SHA (rsa 2048) - A
+|       TLS_RSA_WITH_AES_256_CBC_SHA (rsa 2048) - A
+|       TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA (secp256r1) - C
+|       TLS_RSA_WITH_3DES_EDE_CBC_SHA (rsa 2048) - C
+|       TLS_ECDHE_ECDSA_WITH_RC4_128_SHA (secp256r1) - C
+|       TLS_ECDHE_RSA_WITH_RC4_128_SHA (secp256r1) - C
+|       TLS_RSA_WITH_RC4_128_SHA (rsa 2048) - C
+|       TLS_RSA_WITH_RC4_128_MD5 (rsa 2048) - C
+|     compressors:
+|       NULL
+|     cipher preference: server
+|     warnings:
+|       64-bit block cipher 3DES vulnerable to SWEET32 attack
+|       Broken cipher RC4 is deprecated by RFC 7465
+|       Ciphersuite uses MD5 for message integrity
+|       Weak certificate signature: SHA1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;3DES and RC4 ciphers are especially dangerous to look out for - they are
+very insecure. also you &lt;em&gt;really&lt;/em&gt; should be using TLS1.2 only but if there
+are compatibility issues with older browsers in corporate environments
+(which to me isnt a good enough excuse) then you should at the &lt;em&gt;very least&lt;/em&gt; not be using SSL anymore.&lt;/p&gt;
+&lt;h3&gt;sources / further reading:&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://nmap.org/nsedoc/scripts/ssl-enum-ciphers.html"&gt;nmap documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://sweet32.info/"&gt;sweet32&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><category term="linux"></category><category term="security"></category></entry><entry><title>A refresher on Find and Locate</title><link href="/a-refresher-on-find-and-locate.html" rel="alternate"></link><published>2018-05-20T23:22:00+02:00</published><updated>2018-05-20T23:22:00+02:00</updated><author><name>Author name</name></author><id>tag:None,2018-05-20:/a-refresher-on-find-and-locate.html</id><summary type="html">&lt;h3&gt;LOCATE&lt;/h3&gt;
+&lt;p&gt;Very fast way of finding a file on a system as compared to find.&lt;/p&gt;
+&lt;p&gt;caches all files within a database . updated using a cronjob on a regular basis.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install mlocate
+
+locate httpd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;if file not findable, then you may need to manually update database using:::&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;updatedb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;FIND&lt;/h3&gt;
+&lt;p&gt;more …&lt;/p&gt;</summary><content type="html">&lt;h3&gt;LOCATE&lt;/h3&gt;
+&lt;p&gt;Very fast way of finding a file on a system as compared to find.&lt;/p&gt;
+&lt;p&gt;caches all files within a database . updated using a cronjob on a regular basis.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install mlocate
+
+locate httpd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;if file not findable, then you may need to manually update database using:::&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;updatedb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;FIND&lt;/h3&gt;
+&lt;p&gt;more flexible than locate. Slower. More powerful.&lt;/p&gt;
+&lt;p&gt;find by name&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;find /etc -name motd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;find by user&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;find / -user adm1n
+find / -uid 1004
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;find file modified in last 3 days&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;find / -mtime -3   &amp;amp;gt;&amp;amp;gt;&amp;amp;gt; modified in last 3 days
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;search for files with a specific permission (e.g. world read-write permissions)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;find / -perm 777
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;execute commands using find syntax &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;find /home -user jeff -type f -exec cat {} \;
+
+find /home -user jeff -type f -exec cp {} /home/ \;
+
+find / -user jeff -type f -exec rm {} \;
+&lt;/pre&gt;&lt;/div&gt;</content><category term="linux"></category><category term="system administration"></category></entry></feed>

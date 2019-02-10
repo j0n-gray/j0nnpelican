@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="icon" type="image/vnd.microsoft.icon" href="./">
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Mono">
+  <link rel="stylesheet" type="text/css" href="./theme/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/hatena-bookmark-icon.css">
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jonathan Gray">
+  <meta name="description" content="Posts and writings by Jonathan Gray">
+
+
+<meta name="keywords" content="linux, system administration">
+
+  <title>
+    Jonathan Gray
+&ndash; A refresher on Find and Locate  </title>
+
+</head>
+
+<body>
+  <main>
+    <header>
+      <div class="site-name">
+        <a href=".">Jonathan Gray</a>
+      </div>
+      <p>
+        <a href="./archives.html"><i class="fa fa-archive"></i> Archive</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article__title">
+    <h1><a href="./a-refresher-on-find-and-locate.html">A refresher on Find and Locate</a></h1>
+  </div>
+  <div class="article__meta">
+    <p class="article__meta__post-date">Posted on: Sun 20 May 2018</p>
+ Tags:
+      <a href="./tag/linux.html">#linux</a>,      <a href="./tag/system-administration.html">#system administration</a>    </p>
+  </div>
+  <div class="article__text">
+    <h3>LOCATE</h3>
+<p>Very fast way of finding a file on a system as compared to find.</p>
+<p>caches all files within a database . updated using a cronjob on a regular basis.</p>
+<div class="highlight"><pre><span></span>yum install mlocate
+
+locate httpd
+</pre></div>
+
+
+<p>if file not findable, then you may need to manually update database using:::</p>
+<div class="highlight"><pre><span></span>updatedb
+</pre></div>
+
+
+<h3>FIND</h3>
+<p>more flexible than locate. Slower. More powerful.</p>
+<p>find by name</p>
+<div class="highlight"><pre><span></span>find /etc -name motd
+</pre></div>
+
+
+<p>find by user</p>
+<div class="highlight"><pre><span></span>find / -user adm1n
+find / -uid 1004
+</pre></div>
+
+
+<p>find file modified in last 3 days</p>
+<div class="highlight"><pre><span></span>find / -mtime -3   &amp;gt;&amp;gt;&amp;gt; modified in last 3 days
+</pre></div>
+
+
+<p>search for files with a specific permission (e.g. world read-write permissions)</p>
+<div class="highlight"><pre><span></span>find / -perm 777
+</pre></div>
+
+
+<p>execute commands using find syntax </p>
+<div class="highlight"><pre><span></span>find /home -user jeff -type f -exec cat {} \;
+
+find /home -user jeff -type f -exec cp {} /home/ \;
+
+find / -user jeff -type f -exec rm {} \;
+</pre></div>
+  </div>
+
+</article>
+
+
+  </main>
+    <footer>
+      <div class="author__logo">
+          <img src="./qb.jpg" alt="logo">
+      </div>
+      <section class="author">
+        <div class="author__name">
+          <a href="./pages/about-me.html">Jonathan Gray </a>
+          <p> DevOps Engineer who likes Automation, Infosec, and all things Linux / Open Source Tech </p>
+        </div>
+        <div class="author__link">
+          <ul>
+            <li><a href="./pages/about-me.html" title="About me"><i class="fa fa-link"></i></a></li>
+            <li>
+              <a href="https://twitter.com/j0nn_gray" target="_blank" title="twitter">
+                <i class="fa fa-twitter-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/j0nn_gray" target="_blank" title="github">
+                <i class="fa fa-github-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank" title="linkedin">
+                <i class="fa fa-linkedin-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <div class="ending-message">
+        <p>&copy; Jonathan Gray. Powered by <a href="http://getpelican.com" target="_blank">Pelican</a>, Theme is using <a href="https://github.com/laughk/pelican-hss" target="_blank">HSS</a>. </p>
+      </div>
+    </footer>
+</body>
+</html>

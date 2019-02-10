@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="./theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="./theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="./theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+
+<meta name="author" content="Jonathan Gray" />
+<meta name="description" content="A refresher on find and locate LOCATE Very fast way of finding a file on a system as compared to find. caches all files within a database . updated using a cronjob on a regular basis. yum install mlocate locate httpd if file not findable, then you may need to manually …" />
+<meta name="keywords" content="linux, system administration">
+<meta property="og:site_name" content="Jonathan Gray"/>
+<meta property="og:title" content="Find & Locate"/>
+<meta property="og:description" content="A refresher on find and locate LOCATE Very fast way of finding a file on a system as compared to find. caches all files within a database . updated using a cronjob on a regular basis. yum install mlocate locate httpd if file not findable, then you may need to manually …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="./find-locate.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2018-05-20 23:22:00+01:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="./author/jonathan-gray.html">
+<meta property="article:section" content="linux"/>
+<meta property="article:tag" content="linux"/>
+<meta property="article:tag" content="system administration"/>
+<meta property="og:image" content="/theme/img/green.jpg">
+
+  <title>Jonathan Gray &ndash; Find & Locate</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href=".">
+        <img src="/theme/img/green.jpg" alt="Jonathan Gray" title="Jonathan Gray">
+      </a>
+      <h1><a href=".">Jonathan Gray</a></h1>
+
+<p>Devops Engineer >>> Linux, Coding, Cyber Security</p>
+      <nav>
+        <ul class="list">
+          <li><a href="./pages/about-me.html#about-me">About me</a></li>
+          <li><a href="./pages/projects.html#projects">Projects</a></li>
+
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-twitter" href="https://twitter.com/j0nn_gray" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-github" href="https://github.com/j0nn_gray" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-linkedin" href="https://www.linkedin.com/in/jonathan-gray-071290ab/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a class="sc-google" href="https://plus.google.com/u/0/117609554684039780311" target="_blank"><i class="fa fa-google"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+
+<article class="single">
+  <header>
+    <h1 id="find-locate">Find & Locate</h1>
+    <p>
+          Posted on Sun 20 May 2018 in <a href="./category/linux.html">linux</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <h2>A refresher on find and locate</h2>
+<p>LOCATE</p>
+<p>Very fast way of finding a file on a system as compared to find.</p>
+<p>caches all files within a database . updated using a cronjob on a regular basis.</p>
+<p>yum install mlocate</p>
+<p>locate httpd</p>
+<p>if file not findable, then you may need to manually update database using:::</p>
+<p>updatedb command.</p>
+<p>FIND</p>
+<p>more flexible than locate. Slower. More powerful.</p>
+<p>find by name</p>
+<ul>
+<li>find /etc -name motd</li>
+</ul>
+<p>find by user</p>
+<ul>
+<li>find / -user adm1n</li>
+<li>find / -uid 1004</li>
+</ul>
+<p>find file modified in last 3 days</p>
+<ul>
+<li>
+<p>find / -mtime -3   &gt;&gt;&gt; modified in last 3 days </p>
+</li>
+<li>
+<p>search for files with a specific permission (e.g. world read-write permissions)</p>
+</li>
+<li>
+<p>find / -perm 777</p>
+</li>
+</ul>
+<p>execute commands using find syntax </p>
+<ul>
+<li>
+<p>find /home -user jeff -type f -exec cat {} \;</p>
+</li>
+<li>
+<p>find /home -user jeff -type f -exec cp {} /home/ \;</p>
+</li>
+<li>
+<p>find / -user jeff -type f -exec rm {} \;</p>
+</li>
+</ul>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="./tag/linux.html">linux</a>
+      <a href="./tag/system-administration.html">system administration</a>
+    </p>
+  </div>
+
+
+
+
+</article>
+
+    <footer>
+<p>&copy; Jonathan Gray </p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Jonathan Gray ",
+  "url" : ".",
+  "image": "/theme/img/green.jpg",
+  "description": "Linux, Cyber Security, Coding"
+}
+</script>
+</body>
+</html>

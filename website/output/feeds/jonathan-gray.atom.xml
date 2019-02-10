@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The name of your website - Jonathan Gray</title><link href="/" rel="alternate"></link><link href="/feeds/jonathan-gray.atom.xml" rel="self"></link><id>/</id><updated>2018-05-22T23:22:00+02:00</updated><entry><title>Monitoring diskspace using Python</title><link href="/monitoring-diskspace-using-python.html" rel="alternate"></link><published>2018-05-22T23:22:00+02:00</published><updated>2018-05-22T23:22:00+02:00</updated><author><name>Jonathan Gray</name></author><id>tag:None,2018-05-22:/monitoring-diskspace-using-python.html</id><summary type="html">&lt;p&gt;This could be done much easier in bash but the point was to practice Python.
+There is also the future plan to use HTTP POST requests to send this data to
+a web UI.&lt;/p&gt;
+&lt;p&gt;In retrospect I think using subprocess library and piping the output to stdout
+would have been …&lt;/p&gt;</summary><content type="html">&lt;p&gt;This could be done much easier in bash but the point was to practice Python.
+There is also the future plan to use HTTP POST requests to send this data to
+a web UI.&lt;/p&gt;
+&lt;p&gt;In retrospect I think using subprocess library and piping the output to stdout
+would have been more efficent.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env python3.6&lt;/span&gt;
+
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;smtplib&lt;/span&gt;
+
+&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot; script that gets df -h output &amp;gt; sorts it&lt;/span&gt;
+&lt;span class="sd"&gt;compares output to threshold&lt;/span&gt;
+&lt;span class="sd"&gt;if output exceed threshold send alert via email&lt;/span&gt;
+&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+&lt;span class="n"&gt;define&lt;/span&gt; &lt;span class="n"&gt;partition&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;threshold&lt;/span&gt; &lt;span class="n"&gt;parameters&lt;/span&gt;
+
+&lt;span class="n"&gt;partition&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/home&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;threshold&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;85&lt;/span&gt;
+
+&lt;span class="c1"&gt;#use smtplib to send alert mail to administrator&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;send_alert_mail&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;smtplib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SMTP&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;smtp.gmail.com&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;587&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;starttls&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;login&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;emailAddress&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;msg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;alert:: disk space is beyond 85% threshold&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;# send alert email using parameters above&lt;/span&gt;
+&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sendmail&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;FROM&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;TO&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;msg&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="s2"&gt;Checking partitions for how much space is available...&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# opens disk_output.txt with df -h output (appended using a cronjob)&lt;/span&gt;
+&lt;span class="c1"&gt;# split lines from file into a list using for loop&lt;/span&gt;
+&lt;span class="c1"&gt;# acquire partition and threshold values using list indexing&lt;/span&gt;
+
+&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;disk_output.txt&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;r&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  &lt;span class="c1"&gt;### cronjob ammends df -h output to txt file. could use subprocess &amp;amp; stdout also&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;lines&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="n"&gt;split_line&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lines&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;split_line&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;partition&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;split_line&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;][:&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="n"&gt;threshold&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;alert:: &lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s2"&gt; disk space in {partition} is beyond {threshold}%&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;send_alert_mail&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</content><category term="monitoring"></category><category term="python"></category><category term="coding"></category><category term="linux"></category><category term="scripting"></category></entry><entry><title>SELinux contexts</title><link href="/selinux-contexts.html" rel="alternate"></link><published>2018-05-21T23:22:00+02:00</published><updated>2018-05-21T23:22:00+02:00</updated><author><name>Jonathan Gray</name></author><id>tag:None,2018-05-21:/selinux-contexts.html</id><summary type="html">&lt;h2&gt;SELinux contexts - what to look for&lt;/h2&gt;
+&lt;p&gt;SELINUX RESTORE, ADD, DELETE CONTEXTS&lt;/p&gt;
+&lt;h3&gt;RESTORING CONTEXTS&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;- Could use autorelabel
+- touch /.autorelabel
+- /.autorelabel
+- On next reboot it will relabel everything based on
+proper context
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;or use &lt;strong&gt;restorecon&lt;/strong&gt; command.&lt;/p&gt;
+&lt;h3&gt;CONTEXTS CONTROLLED BY&lt;/h3&gt;
+&lt;p&gt;semanage fcontext -l &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;- Reccomended to use context as defined in semanage fcontext ONLY …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h2&gt;SELinux contexts - what to look for&lt;/h2&gt;
+&lt;p&gt;SELINUX RESTORE, ADD, DELETE CONTEXTS&lt;/p&gt;
+&lt;h3&gt;RESTORING CONTEXTS&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;- Could use autorelabel
+- touch /.autorelabel
+- /.autorelabel
+- On next reboot it will relabel everything based on
+proper context
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;or use &lt;strong&gt;restorecon&lt;/strong&gt; command.&lt;/p&gt;
+&lt;h3&gt;CONTEXTS CONTROLLED BY&lt;/h3&gt;
+&lt;p&gt;semanage fcontext -l &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;- Reccomended to use context as defined in semanage fcontext ONLY
+- NOT set them manually.
+- You can use restorecon to restore context based on defaults
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;ADDING CONTEXT TO DIRECTORY&lt;/h3&gt;
+&lt;p&gt;let us say you set apache DocumentRoot and DirectoryIndex to /content instead of /var/www&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[root@j0nn91 content]# ls -Z
+-rw-r--r--. root root unconfined_u:object_r:default_t:s0 index.html
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Problem is index.html does not have httpd context, so httpd service will not have access to the file.
+Therefore page will be "permission denied" &lt;strong&gt;REGARDLESS OF PERMISSIONS&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;so you need to set the semanage context for this directory to reflect /var/www:::&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/var/www(/.*)?      all files          system_u:object_r:httpd_sys_content_t:s0
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;COMMAND TO ADD CONTEXT TO DIRECTORY&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;semanage fcontext -l | grep /var/www --&amp;amp;gt; can take context and also (/.*) if you forget
+
+semanage fcontext -a -t httpd_sys_content &amp;#39;/content(/.*)?&amp;#39;
+
+[root@j0nn91 content]# semanage fcontext -a -t httpd_sys_content_t &amp;#39;/content(/.*)?&amp;#39;
+
+[root@j0nn91 content]# ls -Z
+-rw-r--r--. root root unconfined_u:object_r:default_t:s0 index.html
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;But file is still default_t. Need to do restorecon to restore to semanage defaults.&lt;/p&gt;
+&lt;h3&gt;RESTORECON TO SET CONTEXT BACK TO DEFAULTS&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;restorecon -Rv /content
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;TO DELETE NEWLY SET CONTEXT&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[root@j0nn91 content]# semanage fcontext -l | grep /content
+/content(/.*)?                                     all files          system_u:object_r:httpd_sys_content_t:s0
+
+
+[root@j0nn91 content]# semanage fcontext -d &amp;quot;/content(/.*)?&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The biggest thing to know with SELinux when you are troubleshooting is improper context
+and incorrect labelling of files can be the main culprits.&lt;/p&gt;</content><category term="SELinux"></category><category term="Red Hat"></category><category term="Linux"></category><category term="Security"></category></entry></feed>

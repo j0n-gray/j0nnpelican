@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>The name of your website - Author name</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">The name of your website </a></h1>
+                <nav><ul>
+                    <li><a href="/pages/about-me.html">About me</a></li>
+                    <li><a href="/category/bash.html">bash</a></li>
+                    <li><a href="/category/linux.html">linux</a></li>
+                    <li><a href="/category/python.html">python</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/open-tcp-socket-directly-in-script.html">open tcp socket directly in script</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-07-02T15:24:00+02:00">
+                Published: Mon 02 July 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/author-name.html">Author name</a>
+        </address>
+<p>In <a href="/category/bash.html">bash</a>.</p>
+<p>tags: <a href="/tag/linux.html">linux</a> <a href="/tag/bash.html">bash</a> <a href="/tag/scripting.html">scripting</a> <a href="/tag/automation.html">automation</a> <a href="/tag/security.html">security</a> </p>
+</footer><!-- /.post-info --><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="k">for</span> host in <span class="nv">$hosts</span>
+<span class="k">do</span>
+timeout <span class="m">5</span> bash -c <span class="s2">&quot;&amp;lt;/dev/tcp/</span><span class="nv">$host</span><span class="s2">/</span><span class="nv">$port</span><span class="s2">&quot;</span>
+<span class="c1">#124 exit status means connection unsuccessful</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">124</span> <span class="o">]</span>
+<span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">&quot;cannot connect to </span><span class="nv">$host</span><span class="s2">:</span><span class="nv">$port</span><span class="s2">&quot;</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> <span class="s2">&quot; successful connection to </span><span class="nv">$host</span><span class="s2">:</span><span class="nv">$port</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+<span class="k">done</span>
+</pre></div>
+</td></tr></table>
+
+<p>testing specific port on multiple hosts using direct tcp socket in absence of nmap,
+telnet and netcat</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/automate-ssh-connectivity-checks.html" rel="bookmark"
+                           title="Permalink to automate SSH connectivity checks">automate SSH connectivity checks</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-07-02T14:59:00+02:00">
+                Published: Mon 02 July 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/author-name.html">Author name</a>
+        </address>
+<p>In <a href="/category/bash.html">bash</a>.</p>
+<p>tags: <a href="/tag/linux.html">linux</a> <a href="/tag/bash.html">bash</a> <a href="/tag/scripting.html">scripting</a> <a href="/tag/automation.html">automation</a> </p>
+</footer><!-- /.post-info -->                <p>say you need to test ssh connectivity to possibly hundreds of servers, you can automate this using
+a while loop in bash.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># SSH connectivity &amp;amp;&amp;amp; authentication checks</span>
+
+<span class="k">while</span> <span class="nb">read</span> host<span class="p">;</span> <span class="k">do</span>
+    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">&quot;</span> <span class="p">&amp;</span>gt<span class="p">;&amp;</span>gt<span class="p">;</span> ssh_output.txt <span class="p">;</span>  ssh -T -o <span class="nv">ConnectTimeout …</span></pre></div></td></tr></table>
+                <a class="readmore" href="/automate-ssh-connectivity-checks.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/mounting-isos.html" rel="bookmark"
+                           title="Permalink to Mounting isos">Mounting isos</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-06-29T15:22:00+02:00">
+                Published: Fri 29 June 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/author-name.html">Author name</a>
+        </address>
+<p>In <a href="/category/linux.html">linux</a>.</p>
+<p>tags: <a href="/tag/linux.html">linux</a> <a href="/tag/system-administration.html">system administration</a> </p>
+</footer><!-- /.post-info -->                <div class="highlight"><pre><span></span>sudo mount -t iso9660 -o loop CentOS-7-x86_64-Everything-1804.iso.1 /mnt/everything/
+</pre></div>
+
+
+<h3>extra reading</h3>
+<p><a href="https://linux.die.net/man/8/mount">mount man page</a></p>
+<p>search for loop devices in google.</p>
+                <a class="readmore" href="/mounting-isos.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/a-concise-primer-on-filesystems-block-devices.html" rel="bookmark"
+                           title="Permalink to A concise primer on filesystems & block devices">A concise primer on filesystems & block devices</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-06-28T00:00:00+02:00">
+                Published: Thu 28 June 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/author-name.html">Author name</a>
+        </address>
+<p>In <a href="/category/linux.html">linux</a>.</p>
+<p>tags: <a href="/tag/linux.html">linux</a> <a href="/tag/system-administration.html">system administration</a> </p>
+</footer><!-- /.post-info -->                <h3>lsblk</h3>
+<p>hard drives are a type of block device in unix systems. they usually follow the format of /dev/sdx </p>
+<p>checking all physical hdds and partitions available [ useful because it picks up unmounted hdds too]</p>
+<div class="highlight"><pre><span></span>NAME                     MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+sda                        8:0    0 238.5G  0 …</pre></div>
+                <a class="readmore" href="/a-concise-primer-on-filesystems-block-devices.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html" rel="bookmark"
+                           title="Permalink to Using NMAP to enumerate ciphers and find vulnerabilities">Using NMAP to enumerate ciphers and find vulnerabilities</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-05-26T13:00:00+02:00">
+                Published: Sat 26 May 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/author-name.html">Author name</a>
+        </address>
+<p>In <a href="/category/linux.html">linux</a>.</p>
+<p>tags: <a href="/tag/linux.html">linux</a> <a href="/tag/security.html">security</a> </p>
+</footer><!-- /.post-info -->                <p>in an ideal world we are all using TLS 1.2 with strong ciphers for application layer internet
+facing  protocols such as HTTPS and SMTP. With NMAP we can quickly discover if this is the case:</p>
+<div class="highlight"><pre><span></span>sudo nmap -Sv --script ssl-enumerate-ciphers -p 443 localhost &amp;lt;&amp;lt; replace as needed
+</pre></div>
+
+
+<p>example …</p>
+                <a class="readmore" href="/using-nmap-to-enumerate-ciphers-and-find-vulnerabilities.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/a-refresher-on-find-and-locate.html" rel="bookmark"
+                           title="Permalink to A refresher on Find and Locate">A refresher on Find and Locate</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-05-20T23:22:00+02:00">
+                Published: Sun 20 May 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/author-name.html">Author name</a>
+        </address>
+<p>In <a href="/category/linux.html">linux</a>.</p>
+<p>tags: <a href="/tag/linux.html">linux</a> <a href="/tag/system-administration.html">system administration</a> </p>
+</footer><!-- /.post-info -->                <h3>LOCATE</h3>
+<p>Very fast way of finding a file on a system as compared to find.</p>
+<p>caches all files within a database . updated using a cronjob on a regular basis.</p>
+<div class="highlight"><pre><span></span>yum install mlocate
+
+locate httpd
+</pre></div>
+
+
+<p>if file not findable, then you may need to manually update database using:::</p>
+<div class="highlight"><pre><span></span>updatedb
+</pre></div>
+
+
+<h3>FIND</h3>
+<p>more …</p>
+                <a class="readmore" href="/a-refresher-on-find-and-locate.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
